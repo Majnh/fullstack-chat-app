@@ -110,6 +110,7 @@ const seedDatabase = async () => {
     console.error("Error seeding database:", error);
   }
 };
+// node src/seeds/user.seed.js --> run data
 
 // Call the function
 seedDatabase();
