@@ -77,7 +77,11 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: res.data });
       toast.success("Profile update successfully");
     } catch (error) {
-      console.log("Error in update profile", error);
+      if (error.legth > error.limit) {
+        toast.error("Pic too large");
+      }
+      console.log("Error in updateProfile", error);
+
       toast.error(error.response.data.message);
     } finally {
       set({ isUpdatingProfile: false });

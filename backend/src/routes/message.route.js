@@ -1,5 +1,5 @@
 import express from "express";
-import { protectRoute } from "../middleware/auth.middleware.js";
+import { loginRequiredMiddleware } from "../middleware/auth.middleware.js";
 import {
   getMessages,
   getUsersForSidebar,
@@ -8,9 +8,9 @@ import {
 
 const router = express.Router();
 
-router.get("/users", protectRoute, getUsersForSidebar);
-router.get("/:id", protectRoute, getMessages);
+router.get("/users", loginRequiredMiddleware, getUsersForSidebar);
+router.get("/:id", loginRequiredMiddleware, getMessages);
 
-router.post("/send/:id", protectRoute, sendMessage);
+router.post("/send/:id", loginRequiredMiddleware, sendMessage);
 
 export default router;

@@ -3,10 +3,10 @@ import {
   login,
   logout,
   signup,
-  updateProfile,
-  checkAuth,
+  checkOnlineStatus,
 } from "../controllers/auth.controller.js";
-import { protectRoute } from "../middleware/auth.middleware.js";
+import { loginRequiredMiddleware } from "../middleware/auth.middleware.js";
+import { updateProfileImage } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 
-router.put("/update-profile", protectRoute, updateProfile);
-router.get("/check", protectRoute, checkAuth);
+router.put("/update-profile", loginRequiredMiddleware, updateProfileImage);
+router.get("/check", loginRequiredMiddleware, checkOnlineStatus);
 
 export default router;

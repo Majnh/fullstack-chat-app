@@ -1,4 +1,4 @@
-import cloudinary from "../lib/cloudinary.js";
+import cloudinary, { FileStorage } from "../lib/cloudinary.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
@@ -80,17 +80,18 @@ export const logout = (req, res) => {
   }
 };
 
-export const updateProfile = async (req, res) => {
+export const updateProfileImage = async (req, res) => {
   try {
     const { profilePic } = req.body;
-    const userID = req.user._id;
+    const userId = req.user._id;
     if (!profilePic) {
       return res.status(400).json({ message: "ProfilePic is required " });
     }
 
+    // const uploadResponse = await FileStorage.upload(profilePic);
     const uploadResponse = await cloudinary.uploader.upload(profilePic);
     const updateUser = await User.findByIdAndUpdate(
-      userID,
+      userId,
       {
         profilePic: uploadResponse.secure_url,
       },
@@ -98,12 +99,13 @@ export const updateProfile = async (req, res) => {
     );
     res.status(200).json(updateUser);
   } catch (error) {
-    console.log("Error in update controller", error.message);
+    if (err.length > err.limit) {
+      res.status(400).json({ message: "File is too large!" });
+    }
     res.status(500).json({ message: "Internal Server Error " });
   }
 };
-
-export const checkAuth = (req, res) => {
+export const checkOnlineStatus = (req, res) => {
   try {
     res.status(200).json(req.user);
   } catch (error) {

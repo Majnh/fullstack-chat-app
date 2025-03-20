@@ -9,3 +9,13 @@ cloudinary.config({
 });
 
 export default cloudinary;
+
+export class FileStorage {
+  constructor() {
+    this.storage = cloudinary;
+  }
+
+  upload(file) {
+    this.storage.uploader.upload(file);
+  }
+}
